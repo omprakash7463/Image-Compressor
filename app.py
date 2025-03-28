@@ -9,14 +9,21 @@ import time
 import requests
 
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS properly
+CORS(app, resources={
+    r"/*": {
+        "origins": ["https://imageshrinks.netlify.app", "http://localhost:3000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 # Keep server alive mechanism
 def keep_alive():
     while True:
         try:
-            # Replace this URL with your actual render.com URL once deployed
-            requests.get('https://your-app-name.onrender.com/ping')
+            requests.get('https://image-compressor-584i.onrender.com/ping')
         except:
             pass
         time.sleep(840)  # 14 minutes in seconds
@@ -268,11 +275,12 @@ def convert():
         app.logger.error(f'Error in conversion: {str(e)}')
         return jsonify({'error': str(e)}), 500
 
+# Add CORS headers to all responses
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin', 'https://imageshrinks.netlify.app')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,POST')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     return response
 
 if __name__ == '__main__':
