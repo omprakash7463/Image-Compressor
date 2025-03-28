@@ -19,7 +19,7 @@ CORS(app, resources={
     }
 })
 
-# Keep server alive mechanism
+# Keep server alive mechanisms
 def keep_alive():
     while True:
         try:
