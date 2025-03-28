@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: imagecompress-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.2
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        value: https://imageshrinks.netlify.app
+      - key: CORS_ORIGINS
+        value: https://imageshrinks.netlify.app
+      - key: MAX_FILE_SIZE
+        value: 10485760
+      - key: ALLOWED_FORMATS
+        value: jpg,jpeg,png,webp
+      - key: COMPRESSION_QUALITY
+        value: 80
+      - key: JWT_SECRET
+        # This will generate a random secret on deployment
+        generateValue: true
+    autoDeploy: true
